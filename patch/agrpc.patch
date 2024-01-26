@@ -1,0 +1,20 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 751e3df..4d76838 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -42,6 +42,15 @@ function(asio_grpc_create_interface_target _asio_grpc_name)
+         configure_file("${_asio_grpc_memory_resource_hpp}"
+                        "${CMAKE_CURRENT_BINARY_DIR}/generated/agrpc/detail/memory_resource.hpp" COPYONLY)
+     endif()
++
++    file(GLOB_RECURSE SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR} *.hpp)
++    target_sources(${_asio_grpc_name} PRIVATE ${SOURCE_FILES})
++
++    foreach(source IN LISTS SOURCE_FILES)
++        get_filename_component(source_path "${source}" PATH)
++        string(REPLACE ${CMAKE_CURRENT_SOURCE_DIR} "" relatie_source_path ${source_path})
++        source_group("${relatie_source_path}" FILES "${source}")
++    endforeach()
+ endfunction()
+ 
+ asio_grpc_create_interface_target(asio-grpc)

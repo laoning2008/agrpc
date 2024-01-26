@@ -7,7 +7,6 @@ project(agrpc CXX)
 
 #CPM
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CPM.cmake)
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/AsioGrpcProtobufGenerator.cmake)
 
 #grpc
 set(ABSL_ENABLE_INSTALL ON)
@@ -20,9 +19,10 @@ target_include_directories(asio INTERFACE ${ASIO_SOURCE_DIR}/asio/include)
 
 #agrpc
 add_compile_definitions(AGRPC_STANDALONE_ASIO)
-CPMAddPackage(NAME AGRPC GITHUB_REPOSITORY Tradias/asio-grpc GIT_TAG v2.9.2 OPTIONS "ASIO_GRPC_USE_RECYCLING_ALLOCATOR ON")
-# add_library(agrpc INTERFACE)
-# target_include_directories(agrpc INTERFACE ${AGRPC_SOURCE_DIR}/src)
+CPMAddPackage(NAME AGRPC GITHUB_REPOSITORY Tradias/asio-grpc GIT_TAG v2.9.2
+            PATCH_COMMAND git apply ${CMAKE_CURRENT_SOURCE_DIR}/patch/agrpc.patch
+            OPTIONS "ASIO_GRPC_USE_RECYCLING_ALLOCATOR ON"
+            )
 
 #examples
 add_subdirectory(examples)
